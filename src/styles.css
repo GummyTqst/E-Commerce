@@ -17,6 +17,9 @@
     --color-surface: oklch(0 0 0);
     --color-surface-muted: oklch(0.9581 0 0);
 
+    /* Border */
+    --color-border: oklch(0.6764 0 0);
+
     /* Raw colors */
     --color-black: oklch(0 0 0);
     --color-white: oklch(1 0 0);

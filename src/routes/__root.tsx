@@ -8,6 +8,7 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import appCss from '../styles.css?url'
+import Navbar from '../Components/layout/navbar'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -36,7 +37,8 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+        <Navbar />
+        <Outlet />
     </RootDocument>
   )
 }
