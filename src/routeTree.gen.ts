@@ -9,24 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SpeakersRouteImport } from './routes/speakers'
-import { Route as HeadphonesRouteImport } from './routes/headphones'
-import { Route as EarphonesRouteImport } from './routes/earphones'
+import { Route as CategoryRouteImport } from './routes/$category'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CategoryProductSlugRouteImport } from './routes/$category.$productSlug'
 
-const SpeakersRoute = SpeakersRouteImport.update({
-  id: '/speakers',
-  path: '/speakers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HeadphonesRoute = HeadphonesRouteImport.update({
-  id: '/headphones',
-  path: '/headphones',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EarphonesRoute = EarphonesRouteImport.update({
-  id: '/earphones',
-  path: '/earphones',
+const CategoryRoute = CategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,62 +23,48 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoryProductSlugRoute = CategoryProductSlugRouteImport.update({
+  id: '/$productSlug',
+  path: '/$productSlug',
+  getParentRoute: () => CategoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/earphones': typeof EarphonesRoute
-  '/headphones': typeof HeadphonesRoute
-  '/speakers': typeof SpeakersRoute
+  '/$category': typeof CategoryRouteWithChildren
+  '/$category/$productSlug': typeof CategoryProductSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/earphones': typeof EarphonesRoute
-  '/headphones': typeof HeadphonesRoute
-  '/speakers': typeof SpeakersRoute
+  '/$category': typeof CategoryRouteWithChildren
+  '/$category/$productSlug': typeof CategoryProductSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/earphones': typeof EarphonesRoute
-  '/headphones': typeof HeadphonesRoute
-  '/speakers': typeof SpeakersRoute
+  '/$category': typeof CategoryRouteWithChildren
+  '/$category/$productSlug': typeof CategoryProductSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/earphones' | '/headphones' | '/speakers'
+  fullPaths: '/' | '/$category' | '/$category/$productSlug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/earphones' | '/headphones' | '/speakers'
-  id: '__root__' | '/' | '/earphones' | '/headphones' | '/speakers'
+  to: '/' | '/$category' | '/$category/$productSlug'
+  id: '__root__' | '/' | '/$category' | '/$category/$productSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EarphonesRoute: typeof EarphonesRoute
-  HeadphonesRoute: typeof HeadphonesRoute
-  SpeakersRoute: typeof SpeakersRoute
+  CategoryRoute: typeof CategoryRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/speakers': {
-      id: '/speakers'
-      path: '/speakers'
-      fullPath: '/speakers'
-      preLoaderRoute: typeof SpeakersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/headphones': {
-      id: '/headphones'
-      path: '/headphones'
-      fullPath: '/headphones'
-      preLoaderRoute: typeof HeadphonesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/earphones': {
-      id: '/earphones'
-      path: '/earphones'
-      fullPath: '/earphones'
-      preLoaderRoute: typeof EarphonesRouteImport
+    '/$category': {
+      id: '/$category'
+      path: '/$category'
+      fullPath: '/$category'
+      preLoaderRoute: typeof CategoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -99,14 +74,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$category/$productSlug': {
+      id: '/$category/$productSlug'
+      path: '/$productSlug'
+      fullPath: '/$category/$productSlug'
+      preLoaderRoute: typeof CategoryProductSlugRouteImport
+      parentRoute: typeof CategoryRoute
+    }
   }
 }
 
+interface CategoryRouteChildren {
+  CategoryProductSlugRoute: typeof CategoryProductSlugRoute
+}
+
+const CategoryRouteChildren: CategoryRouteChildren = {
+  CategoryProductSlugRoute: CategoryProductSlugRoute,
+}
+
+const CategoryRouteWithChildren = CategoryRoute._addFileChildren(
+  CategoryRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EarphonesRoute: EarphonesRoute,
-  HeadphonesRoute: HeadphonesRoute,
-  SpeakersRoute: SpeakersRoute,
+  CategoryRoute: CategoryRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
