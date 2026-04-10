@@ -10,6 +10,7 @@ import {
 import appCss from '../styles.css?url'
 import Navbar from '../Components/layout/navbar'
 import Footer from '../Components/layout/footer'
+import { CartProvider } from '../Components/context/cart-context'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -38,9 +39,11 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-        <Navbar />
-        <Outlet />
-        <Footer />
+        <CartProvider>
+            <Navbar />
+            <Outlet />
+            <Footer />
+        </CartProvider>
     </RootDocument>
   )
 }
